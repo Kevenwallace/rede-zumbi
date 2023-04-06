@@ -11,6 +11,10 @@ router.register(
     views.sobreviventeViewSet,
     basename='rede_zumbi/api'
 )
+router.register(
+    'rede_zumbi/inf',
+    views.infectadoCadastro
+)
 
 urlpatterns = [
     path('', views.view_test)

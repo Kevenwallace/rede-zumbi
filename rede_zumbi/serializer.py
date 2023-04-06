@@ -1,9 +1,14 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from rede_zumbi.models import sobrevivente
+from rede_zumbi.models import Sobrevivente, NivelDeInfecao 
 
 
-class sobreviventeSerializer(serializers.ModelSerializer):
+class SobreviventeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = sobrevivente
+        model = Sobrevivente
         fields = '__all__'
+        
+class InfectadoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NivelDeInfecao
+        fields = 'nome'
