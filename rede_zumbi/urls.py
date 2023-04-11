@@ -3,21 +3,15 @@ from django.urls import path
 
 from rest_framework.routers import SimpleRouter
 
-app_name = 'rede_zumbi'
+app_name = "rede_zumbi"
 
 router = SimpleRouter()
-router.register(
-    'rede_zumbi/api',
-    views.sobreviventeViewSet,
-    basename='rede_zumbi/api'
-)
-router.register(
-    'rede_zumbi/inf',
-    views.infectadoCadastro
-)
+router.register("rede_zumbi/api", views.sobreviventeViewSet, basename="rede_zumbi/api")
+router.register("rede_zumbi/inf", views.infectadoCadastro)
 
-urlpatterns = [
-    path('', views.view_test)
-]
+router.register("rede_zumbi/mercado", views.MercadoZumbi)
+
+
+urlpatterns = [path("", views.view_test)]
 
 urlpatterns += router.urls

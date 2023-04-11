@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rede_zumbi', '0005_niveldeinfecao_pontosdeinfectacao'),
+        ("rede_zumbi", "0005_niveldeinfecao_pontosdeinfectacao"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='sobrevivente',
-            name='nome',
+            model_name="sobrevivente",
+            name="nome",
             field=models.CharField(max_length=65, unique=True),
         ),
     ]

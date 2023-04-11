@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rede_zumbi', '0004_sobrevivente_idade_sobrevivente_pontosdeinfectacao'),
+        ("rede_zumbi", "0004_sobrevivente_idade_sobrevivente_pontosdeinfectacao"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='niveldeinfecao',
-            name='pontosDeInfectacao',
+            model_name="niveldeinfecao",
+            name="pontosDeInfectacao",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),

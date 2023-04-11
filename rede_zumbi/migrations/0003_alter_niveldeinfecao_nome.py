@@ -5,16 +5,19 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rede_zumbi', '0002_niveldeinfecao'),
+        ("rede_zumbi", "0002_niveldeinfecao"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='niveldeinfecao',
-            name='nome',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='rede_zumbi.sobrevivente'),
+            model_name="niveldeinfecao",
+            name="nome",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="rede_zumbi.sobrevivente",
+            ),
             preserve_default=False,
         ),
     ]

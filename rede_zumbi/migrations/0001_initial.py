@@ -5,27 +5,48 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='items',
+            name="items",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='sobrevivente',
+            name="sobrevivente",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('nome', models.CharField(max_length=65)),
-                ('sexo', models.CharField(max_length=20)),
-                ('últimoLocal', models.CharField(max_length=30)),
-                ('inventario', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='rede_zumbi.items')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("nome", models.CharField(max_length=65)),
+                ("sexo", models.CharField(max_length=20)),
+                ("últimoLocal", models.CharField(max_length=30)),
+                (
+                    "inventario",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="rede_zumbi.items",
+                    ),
+                ),
             ],
         ),
     ]

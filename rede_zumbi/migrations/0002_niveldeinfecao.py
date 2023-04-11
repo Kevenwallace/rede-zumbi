@@ -5,18 +5,32 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rede_zumbi', '0001_initial'),
+        ("rede_zumbi", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='NivelDeInfecao',
+            name="NivelDeInfecao",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('infectado', models.BooleanField(default=False)),
-                ('nome', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='rede_zumbi.sobrevivente')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("infectado", models.BooleanField(default=False)),
+                (
+                    "nome",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="rede_zumbi.sobrevivente",
+                    ),
+                ),
             ],
         ),
     ]

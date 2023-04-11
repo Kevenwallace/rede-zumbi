@@ -4,21 +4,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rede_zumbi', '0003_alter_niveldeinfecao_nome'),
+        ("rede_zumbi", "0003_alter_niveldeinfecao_nome"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='sobrevivente',
-            name='idade',
+            model_name="sobrevivente",
+            name="idade",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='sobrevivente',
-            name='pontosDeInfectacao',
+            model_name="sobrevivente",
+            name="pontosDeInfectacao",
             field=models.IntegerField(default=1),
             preserve_default=False,
         ),

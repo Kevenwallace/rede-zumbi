@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rede_zumbi', '0006_alter_sobrevivente_nome'),
+        ("rede_zumbi", "0006_alter_sobrevivente_nome"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='niveldeinfecao',
-            name='infectado',
+            model_name="niveldeinfecao",
+            name="infectado",
         ),
         migrations.AddField(
-            model_name='sobrevivente',
-            name='infectado',
+            model_name="sobrevivente",
+            name="infectado",
             field=models.BooleanField(default=False),
         ),
     ]
