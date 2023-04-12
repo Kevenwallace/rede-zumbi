@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
-from rede_zumbi.models import Sobrevivente, ComercioZumbiModel
-from rede_zumbi.serializer import SobreviventeSerializer, ComercioZumbiSerializer
+from rede_zumbi.models import Sobrevivente, ComercioZumbiModel, Inventario
+from rede_zumbi.serializer import SobreviventeSerializer, ComercioZumbiSerializer, InventarioSerializer
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -10,7 +10,7 @@ from rest_framework.response import Response
 class sobreviventeViewSet(ModelViewSet):
     queryset = Sobrevivente.objects.all()
     serializer_class = SobreviventeSerializer
-    http_method_names = ["GET", "POST"]
+    http_method_names = ["get", "POST"]
 
 
 class infectadoCadastro(ModelViewSet):
@@ -70,7 +70,11 @@ class MercadoZumbi(ModelViewSet):
                 data=None,
                 status=status.HTTP_403_FORBIDDEN,
             )
-
+            
+    
+class InventarioViewSet(ModelViewSet):
+    queryset = Inventario.objects.all()
+    serializer_class = InventarioSerializer
 
 def view_test(request):
     return render(request, "index.html")
