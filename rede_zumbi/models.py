@@ -6,6 +6,8 @@ class ItemsModel(models.Model):
     nome = models.CharField(max_length=15, unique=True)
     valor = models.IntegerField()
 
+    def __str__(self) :
+        return self.nome
 
 class Sobrevivente(models.Model):
     nome = models.CharField(max_length=65, unique=True)
@@ -19,11 +21,18 @@ class Sobrevivente(models.Model):
         return self.nome
 
 
-class Inventario(models.Model):
+class InventarioModel(models.Model):
     nome_sobrevivente = models.ForeignKey(
-        Sobrevivente, on_delete=models.CASCADE, null=False, related_name="nome_sobrevivente" 
+        Sobrevivente,
+        on_delete=models.CASCADE,
+        null=False,
+        related_name="Inventario",
     )
     item = models.ForeignKey(ItemsModel, on_delete=models.CASCADE, null=True)
+    quantidade = models.IntegerField(null=True)
+    
+   
+    
 
 
 class ComercioZumbiModel(models.Model):
@@ -33,8 +42,8 @@ class ComercioZumbiModel(models.Model):
         null=False,
         related_name="negoiciado_um",
     )
-    item1_ngc1 = models.CharField(max_length=15)
-    item2_ngc1 = models.CharField(max_length=15)
+    itens_ngc1 = models.CharField(max_length=15)
+    
 
     negociador_2 = models.ForeignKey(
         Sobrevivente,
@@ -42,8 +51,8 @@ class ComercioZumbiModel(models.Model):
         null=False,
         related_name="negociador_dois",
     )
-    item1_ngc2 = models.CharField(max_length=15)
-    item2_ngc2 = models.CharField(max_length=15)
+    itens_ngc2 = models.CharField(max_length=15)
+    
 
-    def __str__(self):
-        return self.nome
+    # def __str__(self):
+    #     return self.nome

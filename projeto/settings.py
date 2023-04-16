@@ -78,7 +78,7 @@ WSGI_APPLICATION = "projeto.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "(RZ)-rede-zumbi",
+        "NAME": "postgres",
         "USER": "postgres",
         "PASSWORD": "armitage",
         "HOST": "localhost",

@@ -10,6 +10,7 @@ router.register("rede_zumbi/api", views.sobreviventeViewSet, basename="rede_zumb
 router.register("rede_zumbi/inf", views.infectadoCadastro)
 router.register("rede_zumbi/inventario", views.InventarioViewSet)
 router.register("rede_zumbi/mercado", views.MercadoZumbi)
+router.register("rede_zumbi/item", views.ItemsViewSet)
 
 
 urlpatterns = [path("", views.view_test)]
