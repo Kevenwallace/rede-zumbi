@@ -9,52 +9,115 @@ from rede_zumbi.serializer import (
 )
 from rest_framework import status
 from rest_framework.response import Response
-
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 class sobreviventeViewSet(ModelViewSet):
+   
+    
     queryset = Sobrevivente.objects.all()
     serializer_class = SobreviventeSerializer
-    http_method_names = ["get", "post"]
+    http_method_names = ["get", "post", "patch"]
     
+    def get_queryset(self):
+            qr = super().get_queryset()
+            nome = self.request.query_params.get('nome', None)
+        
+            if nome is not None:
+                qr = qr.filter(nome=nome)
+            return qr
+    
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        obj = get_object_or_404(
+            self.get_queryset(),
+            pk=pk
+            )
+
+        return obj
+    
+    
+        
     def retrieve(self, request, *args, **kwargs):
-        instance = Sobrevivente.Inventario.filter(nome='keven')
+        instance = self.get_object()
         serializer = self.get_serializer(instance)
-        print(serializer)
         return Response(serializer.data)
     
     def create(self, request, *args, **kwargs):
-        Inventario_items = request.data.pop('Inventario')
-        sobrevivente = Sobrevivente(
-            nome=request.data['nome'],
-            idade=request.data['idade'],
-            sexo=request.data['sexo'],
-            últimoLocal=request.data['últimoLocal'],
-            pontosDeInfectacao=request.data['pontosDeInfectacao']
-            )
-        sobrevivente.save()
-        nome = Sobrevivente.objects.get(nome=request.data['nome'])
-        bulk_aux = list()
-        print(Inventario_items)
         
-        for item_qtd in Inventario_items[0]['item']:
-            print(item_qtd)
+        """
+        o Inventaria recebe uma lista de dicionarios onde a key(chave) é o nome do item
+        e o value(valor) é a quantidade desse mesmo no inventario
+        
+        
+        {
+        "Inventario": [
+            {
+                "agua": 2
+            },
+            {
+                "municao": 3
+            }, 
+            {
+                "agua":5
+            }
+        ],
+            "nome": "kilianmbappe",
+            "idade": 12,
+            "sexo": "masculino",
+            "últimoLocal": "123414X 124142",
+            "pontosDeInfectacao": 0
+            
+        }
+
+        """
+        
+        
+        Inventario_items = request.data.pop('Inventario')
+        sobrevivente = Sobrevivente(**request.data)
+        sobrevivente.save()
+        
+        nome = sobrevivente.nome
+        bulk_aux = list()
+        
+        for item_qtd in Inventario_items:
             for x, y in item_qtd.items():
-                print(x)
-                print(y)
                 instace = InventarioModel(
-                    nome_sobrevivente=nome,
+                    nome_sobrevivente=sobrevivente,
                     item=ItemsModel.objects.get(nome=x),
                     quantidade=y                
                 )
                 bulk_aux.append(instace)
         InventarioModel.objects.bulk_create(bulk_aux)
-        
-        
         return Response(
             status=status.HTTP_201_CREATED,
         )
 
+
+    def partial_update(self, request, *args, **kwargs):
+        """
+        passe a id na url: rede_zumbi/api/id/
+        
+        e digite a localizacao atual no .json
+        ex:
+            "ultimoLocal": "123414X 1111122"
+        """
+        
+        
+        
+        sobrevivente = self.get_object()
+        serializer = SobreviventeSerializer(
+            instance=sobrevivente,
+            data=request.data, 
+            many=False,
+            context={'request': request},
+            partial=True,
+            )
+        serializer.is_valid(raise_exception=True)       
+        serializer.save()
+        return Response(serializer.data)
+    
+    
 
 class infectadoCadastro(ModelViewSet):
     queryset = Sobrevivente.objects.all()
@@ -78,11 +141,11 @@ class infectadoCadastro(ModelViewSet):
 
         serializer = check_pontos_de_infeccao(pessoa)
 
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        headers = self.get_success_headers(serializer.data)
+        # pessoa.is_valid(raise_exception=True)
+        pessoa.save()
+        headers = self.get_success_headers(request.data)
         return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+            request.data, status=status.HTTP_200_OK, headers=headers
         )
 
 
@@ -97,7 +160,9 @@ class MercadoZumbi(ModelViewSet):
             pessoa1 = Sobrevivente.objects.get(nome=request.data["negociador_1"])
             pessoa2 = Sobrevivente.objects.get(nome=request.data["negociador_2"])
             
+            pessoa1.inventario.all()
             
+                                                                                               
             lista_items1 = serializerData['itens_ngc1']
             lista_items1_ids = list()
             count1 = 0
@@ -116,12 +181,8 @@ class MercadoZumbi(ModelViewSet):
                 count2 += itens_ngc2.valor
                 lista_items2_ids.append(itens_ngc2.id)
             
-            print("sobre os items do primeiro negociante, lista_itens:", lista_items1, "lista_itens_ids:", lista_items1_ids, "count...:", count1)
-            
-            print("sobre os items do segundo negociante, lista_itens:", lista_items2, "lista_itens_ids:", lista_items2_ids, "count...:", count2)
             
             if count1 == count2:
-            
                 for x, ide in enumerate(lista_items1_ids):
                     ngc1_inventario = InventarioModel.objects.filter(
                         nome_sobrevivente_id=pessoa1.id,
@@ -139,12 +200,15 @@ class MercadoZumbi(ModelViewSet):
                     if ngc1_inventario == None:
                         ngc1_inventario = InventarioModel(
                             nome_sobrevivente_id=pessoa1.id,
-                            item_id=lista_items2_ids[x])
+                            item_id=lista_items2_ids[x],
+                            quantidade=1
+                            )
                         ngc1_inventario.save()
                     else:
                         ngc1_inventario.quantidade += 1
                         ngc1_inventario.save()
-            
+
+                
                 for x, ide in enumerate(lista_items2_ids):
                     ngc2_inventario = InventarioModel.objects.filter(
                         nome_sobrevivente_id=pessoa2.id,
@@ -160,23 +224,23 @@ class MercadoZumbi(ModelViewSet):
                     if ngc2_inventario == None:
                         ngc2_inventario = InventarioModel(
                             nome_sobrevivente_id=pessoa2.id,
-                            item_id=lista_items1_ids[x])
-                        ngc1_inventario.save()
+                            item_id=lista_items1_ids[x],
+                            quantidade=1
+                            )
+                            
+                        ngc2_inventario.save()
                     else:
-                        ngc1_inventario.quantidade += 1
-                        ngc1_inventario.save()            
+                        ngc2_inventario.quantidade += 1
+                        ngc2_inventario.save()            
         
-        case_of_trades(request.data)
+
+            return Response(status=status.HTTP_202_ACCEPTED)
+        try:
+            response = case_of_trades(request.data)
+            return  response
+        except:
+            return Response(status=status.HTTP_412_PRECONDITION_FAILED)
         
-        
-    #     return Response(
-    #         serializer.data, status=status.HTTP_201_CREATED, headers=headers
-    #     )
-    # else:
-    #     return Response(
-    #         data=None,
-    #         status=status.HTTP_403_FORBIDDEN,
-    #     )
 
 
 class ItemsViewSet(ModelViewSet):

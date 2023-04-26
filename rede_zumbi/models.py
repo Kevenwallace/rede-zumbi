@@ -13,7 +13,7 @@ class Sobrevivente(models.Model):
     nome = models.CharField(max_length=65, unique=True)
     idade = models.IntegerField()
     sexo = models.CharField(max_length=20)
-    últimoLocal = models.CharField(max_length=30)
+    ultimoLocal = models.CharField(max_length=30)
     pontosDeInfectacao = models.IntegerField(null=True)
     infectado = models.BooleanField(default=False)
 
@@ -29,7 +29,7 @@ class InventarioModel(models.Model):
         related_name="Inventario",
     )
     item = models.ForeignKey(ItemsModel, on_delete=models.CASCADE, null=True)
-    quantidade = models.IntegerField(null=True)
+    quantidade = models.IntegerField(null=True, default=0)
     
    
     

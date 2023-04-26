@@ -9,38 +9,39 @@ class ItemsSerializer(serializers.ModelSerializer):
 
 
 class InventarioSerializer(serializers.ModelSerializer):
-    # sobreviventes = SobreviventeSerializer(many=False)
 
     class Meta:
         model = InventarioModel
         fields = [
-            # "sobreviventes",
             "item"
         ]
-
-
+        
 
 class SobreviventeSerializer(serializers.ModelSerializer):
-    # itemsla = ItemsSerializer(many=False)
     Inventario = InventarioSerializer(many=True)
+
 
     class Meta:
         model = Sobrevivente
         fields = [
+            "id",
             "Inventario",
             "nome",
             "idade",
             "sexo",
-            "últimoLocal",
+            "ultimoLocal",
             "pontosDeInfectacao",
+            "infectado"
         ]
-        read_only_fields = ["infectado"]
+        
+    def update(self, instance, validated_data):
+        instance.ultimoLocal = validated_data.get("ultimoLocal", instance.ultimoLocal)
+        instance.save()
 
-
-
+        return instance
+        
 
 class ComercioZumbiSerializer(serializers.ModelSerializer):
-    # sobreviventes = SobreviventeSerializer(many=False)
 
     class Meta:
         model = ComercioZumbiModel
